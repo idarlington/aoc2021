@@ -4,7 +4,7 @@ use std::fs;
 pub fn day1() {
     let sliding_window: usize = 3;
 
-    let file_path = "resources/day1-input.txt";
+    let file_path = "resources/inputs/day1.txt";
     let contents = fs::read_to_string(file_path)
         .expect("Something went wrong reading the file");
 
