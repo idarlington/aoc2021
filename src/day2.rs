@@ -33,11 +33,11 @@ pub fn day2() {
         directions.push(Sub { depth, length });
     };
 
-    day2_part_1(directions.clone());
+    day_2_part_1(directions.clone());
     day_2_part_2(directions.clone());
 }
 
-fn day2_part_1(directions: Vec<Sub>) {
+fn day_2_part_1(directions: Vec<Sub>) {
     let sum_sub_directions: Sub = directions.into_iter().fold(
         Sub { depth: 0, length: 0 }, |sum_direction, direction| {
             Sub {
@@ -53,7 +53,7 @@ fn day_2_part_2(directions: Vec<Sub>) {
     let (_, sum_sub_directions): (i32, Sub) = directions.into_iter().fold(
         (0i32, Sub { depth: 0, length: 0 }), |(aim, sum_direction), direction| {
             let updated_aim = aim + direction.depth;
-            let updated_depth = (aim * direction.length) + sum_direction.depth;
+            let updated_depth: i32 = (aim * direction.length) + sum_direction.depth;
             let updated_length = direction.length + sum_direction.length;
 
             (updated_aim, Sub {
