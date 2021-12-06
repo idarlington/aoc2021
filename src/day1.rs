@@ -1,7 +1,7 @@
 use std::fs;
 
 
-fn main() {
+pub fn day1() {
     let sliding_window: usize = 3;
 
     let file_path = "resources/day1-input.txt";
@@ -22,7 +22,7 @@ fn day_1_part_1(input: Vec<i32>) {
         (val, sum)
     });
 
-    println!("{}", sum_increasing);
+    println!("Day 1, part 1: {}", sum_increasing);
 }
 
 fn day_1_part_2(input: Vec<i32>, sliding_window: usize) {
@@ -37,6 +37,6 @@ fn day_1_part_2(input: Vec<i32>, sliding_window: usize) {
         }
     }
 
-    println!("{}", sum_increasing);
+    println!("Day 1, part 2: {}", sum_increasing);
 }
 
