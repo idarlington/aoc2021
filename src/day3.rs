@@ -8,20 +8,19 @@ struct BitCount {
 
 pub fn day3() {
     let file_path = "resources/inputs/day3.txt";
-    let contents = fs::read_to_string(file_path).expect("Something went wrong reading the file");
+    let input = fs::read_to_string(file_path).expect("Something went wrong reading the file");
+    let input_lines: Vec<&str> = input.split('\n').collect();
 
-    let content_value: Vec<&str> = contents.split('\n').collect();
-
-    day_3_part_1(content_value.clone());
-    day_3_part_2(content_value.clone());
+    day_3_part_1(input_lines.clone());
+    day_3_part_2(input_lines.clone());
 }
 
-fn day_3_part_1(content_value: Vec<&str>) {
-    let column_bit_counts: Vec<BitCount> = get_column_bit_counts(content_value);
+fn day_3_part_1(input_lines: Vec<&str>) {
+    let column_bit_counts: Vec<BitCount> = get_column_bit_counts(input_lines);
 
     let (gamma_rate_string, epsilon_rate_string): (String, String) =
         column_bit_counts.clone().into_iter().fold(
-            ("".to_owned(), "".to_owned()),
+            (String::from(""), String::from("")),
             |(mut gamma_rate, mut epsilon_rate), column_count| {
                 if column_count.zero > column_count.one {
                     gamma_rate.push_str("0");
@@ -43,11 +42,11 @@ fn day_3_part_1(content_value: Vec<&str>) {
     );
 }
 
-fn day_3_part_2(content_value: Vec<&str>) {
-    let number_of_bits = content_value.clone()[0].len();
+fn day_3_part_2(input_lines: Vec<&str>) {
+    let number_of_bits = input_lines.clone()[0].len();
 
-    let mut oxygen_generator_lines: Vec<&str> = content_value.clone();
-    let mut co2_generator_lines: Vec<&str> = content_value.clone();
+    let mut oxygen_generator_lines: Vec<&str> = input_lines.clone();
+    let mut co2_generator_lines: Vec<&str> = input_lines.clone();
 
     for index in 0..number_of_bits {
         let oxygen_generator_lines_column_count =
@@ -110,15 +109,15 @@ fn day_3_part_2(content_value: Vec<&str>) {
     );
 }
 
-fn get_column_bit_counts(content_value: Vec<&str>) -> Vec<BitCount> {
-    let number_of_bits = content_value.clone()[0].len();
+fn get_column_bit_counts(input_lines: Vec<&str>) -> Vec<BitCount> {
+    let number_of_bits = input_lines.clone()[0].len();
     let mut column_bit_counts: Vec<BitCount> = Vec::new();
 
     for _ in 0..number_of_bits {
         column_bit_counts.push(BitCount { one: 0, zero: 0 })
     }
 
-    for line in content_value {
+    for line in input_lines {
         let line_columns = line.chars().collect::<Vec<char>>();
         for index in 0..number_of_bits {
             if line_columns[index] == '1' {
