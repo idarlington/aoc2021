@@ -52,6 +52,7 @@ fn day_3_part_2(input_lines: Vec<&str>) {
         let oxygen_generator_lines_column_count =
             get_column_bit_counts(oxygen_generator_lines.clone());
         let co2_generator_lines_column_count = get_column_bit_counts(co2_generator_lines.clone());
+
         let oxygen_generator_line_bit_count = &oxygen_generator_lines_column_count[index];
         let co2_generator_lines_bit_count = &co2_generator_lines_column_count[index];
 
@@ -62,20 +63,17 @@ fn day_3_part_2(input_lines: Vec<&str>) {
         for line in oxygen_generator_lines.clone() {
             let line_columns = &line.chars().collect::<Vec<char>>();
 
-            if oxygen_generator_line_bit_count.zero > oxygen_generator_line_bit_count.one {
-                if line_columns[index] == '1' {
-                    if oxygen_generator_lines.len() > 1 {
-                        oxygen_generator_lines.retain(|current_line| current_line != &line)
-                    }
-                }
-            } else if oxygen_generator_line_bit_count.one > oxygen_generator_line_bit_count.zero
-                || oxygen_generator_line_bit_count.zero == oxygen_generator_line_bit_count.one
+            if oxygen_generator_line_bit_count.zero > oxygen_generator_line_bit_count.one
+                && line_columns[index] == '1'
+                && oxygen_generator_lines.len() > 1
             {
-                if line_columns[index] == '0' {
-                    if oxygen_generator_lines.len() > 1 {
-                        oxygen_generator_lines.retain(|current_line| current_line != &line)
-                    }
-                }
+                oxygen_generator_lines.retain(|current_line| current_line != &line)
+            } else if (oxygen_generator_line_bit_count.one > oxygen_generator_line_bit_count.zero
+                || oxygen_generator_line_bit_count.zero == oxygen_generator_line_bit_count.one)
+                && line_columns[index] == '0'
+                && oxygen_generator_lines.len() > 1
+            {
+                oxygen_generator_lines.retain(|current_line| current_line != &line)
             }
         }
 
@@ -83,19 +81,15 @@ fn day_3_part_2(input_lines: Vec<&str>) {
             let line_columns = &line.chars().collect::<Vec<char>>();
 
             if co2_generator_lines_bit_count.zero > co2_generator_lines_bit_count.one {
-                if line_columns[index] == '0' {
-                    if co2_generator_lines.len() > 1 {
-                        co2_generator_lines.retain(|current_line| current_line != &line)
-                    }
+                if line_columns[index] == '0' && co2_generator_lines.len() > 1 {
+                    co2_generator_lines.retain(|current_line| current_line != &line)
                 }
-            } else if co2_generator_lines_bit_count.one > co2_generator_lines_bit_count.zero
-                || co2_generator_lines_bit_count.zero == co2_generator_lines_bit_count.one
+            } else if (co2_generator_lines_bit_count.one > co2_generator_lines_bit_count.zero
+                || co2_generator_lines_bit_count.zero == co2_generator_lines_bit_count.one)
+                && line_columns[index] == '1'
+                && co2_generator_lines.len() > 1
             {
-                if line_columns[index] == '1' {
-                    if co2_generator_lines.len() > 1 {
-                        co2_generator_lines.retain(|current_line| current_line != &line)
-                    }
-                }
+                co2_generator_lines.retain(|current_line| current_line != &line)
             }
         }
     }
