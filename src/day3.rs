@@ -80,10 +80,11 @@ fn day_3_part_2(input_lines: Vec<&str>) {
         for line in co2_generator_lines.clone() {
             let line_columns = &line.chars().collect::<Vec<char>>();
 
-            if co2_generator_lines_bit_count.zero > co2_generator_lines_bit_count.one {
-                if line_columns[index] == '0' && co2_generator_lines.len() > 1 {
-                    co2_generator_lines.retain(|current_line| current_line != &line)
-                }
+            if co2_generator_lines_bit_count.zero > co2_generator_lines_bit_count.one
+                && line_columns[index] == '0'
+                && co2_generator_lines.len() > 1
+            {
+                co2_generator_lines.retain(|current_line| current_line != &line)
             } else if (co2_generator_lines_bit_count.one > co2_generator_lines_bit_count.zero
                 || co2_generator_lines_bit_count.zero == co2_generator_lines_bit_count.one)
                 && line_columns[index] == '1'
