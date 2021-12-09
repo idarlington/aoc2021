@@ -6,7 +6,7 @@ struct SubDirection {
     length: i32,
 }
 
-pub fn day2() {
+pub fn main() {
     let file_path = "resources/inputs/day2.txt";
     let contents = fs::read_to_string(file_path).expect("Something went wrong reading the file");
 

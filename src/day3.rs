@@ -6,7 +6,7 @@ struct BitCount {
     zero: i32,
 }
 
-pub fn day3() {
+pub fn main() {
     let file_path = "resources/inputs/day3.txt";
     let input = fs::read_to_string(file_path).expect("Something went wrong reading the file");
     let input_lines: Vec<&str> = input.split('\n').collect();
@@ -106,11 +106,7 @@ fn day_3_part_2(input_lines: Vec<&str>) {
 
 fn get_column_bit_counts(input_lines: Vec<&str>) -> Vec<BitCount> {
     let number_of_bits = input_lines.clone()[0].len();
-    let mut column_bit_counts: Vec<BitCount> = Vec::new();
-
-    for _ in 0..number_of_bits {
-        column_bit_counts.push(BitCount { one: 0, zero: 0 })
-    }
+    let mut column_bit_counts = vec![BitCount { one: 0, zero: 0 }; number_of_bits];
 
     for line in input_lines {
         let line_columns = line.chars().collect::<Vec<char>>();

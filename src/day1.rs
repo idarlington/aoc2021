@@ -1,6 +1,6 @@
 use std::fs;
 
-pub fn day1() {
+pub fn main() {
     let sliding_window: usize = 3;
 
     let file_path = "resources/inputs/day1.txt";
