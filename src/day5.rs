@@ -91,96 +91,121 @@ fn define_bounds(vent_lines: &Vec<VentLine>) -> (i32, i32) {
 
 fn calculate_travelling(vent_lines: &Vec<VentLine>, calculate_diagonal: bool) -> Vec<Vec<i32>> {
     let bounds = define_bounds(&vent_lines);
-    let travelling = vec![vec![0; (bounds.1 + 1) as usize]; (bounds.0 + 1) as usize];
+    let travelling: Vec<Vec<i32>> = vec![vec![0; (bounds.1 + 1) as usize]; (bounds.0 + 1) as usize];
 
     vent_lines
         .clone()
         .iter()
-        .fold(travelling, |mut travelling_agg, vent_line| {
+        .fold(travelling, |travelling_agg, vent_line| {
             if is_travelling_horizontal(vent_line) {
-                let y = vent_line.first.1 as usize;
-
-                let (start, end): (usize, usize) = {
-                    if vent_line.first.0 > vent_line.second.0 {
-                        (vent_line.second.0 as usize, vent_line.first.0 as usize)
-                    } else {
-                        (vent_line.first.0 as usize, vent_line.second.0 as usize)
-                    }
-                };
-
-                for index in start..=end {
-                    travelling_agg[index as usize][y] += 1;
-                }
+                calculate_travelling_horizontal(vent_line, &travelling_agg)
+            } else if is_travelling_vertical(vent_line) {
+                calculate_travelling_vertical(vent_line, &travelling_agg)
+            } else if is_travelling_diagonal(vent_line) && calculate_diagonal {
+                calculate_travelling_diagonal(vent_line, &travelling_agg)
+            } else {
+                travelling_agg
             }
-
-            if is_travelling_vertical(vent_line) {
-                let x = vent_line.first.0 as usize;
-
-                let (start, end): (usize, usize) = {
-                    if vent_line.first.1 > vent_line.second.1 {
-                        (vent_line.second.1 as usize, vent_line.first.1 as usize)
-                    } else {
-                        (vent_line.first.1 as usize, vent_line.second.1 as usize)
-                    }
-                };
-
-                for index in start..=end {
-                    travelling_agg[x][index as usize] += 1;
-                }
-            }
-
-            if is_travelling_diagonal(vent_line) && calculate_diagonal {
-                let is_increasing = (vent_line.first.0 == vent_line.first.1
-                    && vent_line.second.0 == vent_line.second.1)
-                    || (vent_line.first.0 > vent_line.second.0
-                    && vent_line.first.1 > vent_line.second.1)
-                    || (vent_line.first.0 < vent_line.second.0
-                    && vent_line.first.1 < vent_line.second.1);
-
-                if is_increasing {
-                    let (start, end) = {
-                        if vent_line.first.0 > vent_line.second.0 {
-                            (vent_line.second, vent_line.first)
-                        } else {
-                            (vent_line.first, vent_line.second)
-                        }
-                    };
-
-                    for index in (start.0..=end.0).zip(start.1..=end.1) {
-                        let (x_index, y_index) = index;
-                        travelling_agg[x_index as usize][y_index as usize] += 1
-                    }
-                } else {
-                    let (increasing, reducing) = {
-                        if vent_line.first.0 > vent_line.second.0 {
-                            (
-                                (vent_line.first.1, vent_line.second.1, "y"),
-                                (vent_line.second.0, vent_line.first.0, "x"),
-                            )
-                        } else {
-                            (
-                                (vent_line.first.0, vent_line.second.0, "x"),
-                                (vent_line.second.1, vent_line.first.1, "y"),
-                            )
-                        }
-                    };
-
-                    for index in (increasing.0..=increasing.1).zip((reducing.0..=reducing.1).rev())
-                    {
-                        let (x_index, y_index) = {
-                            if increasing.2 == "x" {
-                                (index.0, index.1)
-                            } else {
-                                (index.1, index.0)
-                            }
-                        };
-                        travelling_agg[x_index as usize][y_index as usize] += 1
-                    }
-                }
-            }
-
-            travelling_agg.clone()
         })
+}
+
+fn calculate_travelling_horizontal(
+    vent_line: &VentLine,
+    travelling: &Vec<Vec<i32>>,
+) -> Vec<Vec<i32>> {
+    let y = vent_line.first.1 as usize;
+    let mut travelling = travelling.clone();
+
+    let (start, end): (usize, usize) = {
+        if vent_line.first.0 > vent_line.second.0 {
+            (vent_line.second.0 as usize, vent_line.first.0 as usize)
+        } else {
+            (vent_line.first.0 as usize, vent_line.second.0 as usize)
+        }
+    };
+
+    for index in start..=end {
+        travelling[index as usize][y] += 1;
+    }
+
+    travelling
+}
+
+fn calculate_travelling_vertical(
+    vent_line: &VentLine,
+    travelling: &Vec<Vec<i32>>,
+) -> Vec<Vec<i32>> {
+    let x = vent_line.first.0 as usize;
+
+    let mut travelling = travelling.clone();
+
+    let (start, end): (usize, usize) = {
+        if vent_line.first.1 > vent_line.second.1 {
+            (vent_line.second.1 as usize, vent_line.first.1 as usize)
+        } else {
+            (vent_line.first.1 as usize, vent_line.second.1 as usize)
+        }
+    };
+
+    for index in start..=end {
+        travelling[x][index as usize] += 1;
+    }
+
+    travelling
+}
+
+fn calculate_travelling_diagonal(
+    vent_line: &VentLine,
+    travelling: &Vec<Vec<i32>>,
+) -> Vec<Vec<i32>> {
+    let mut travelling = travelling.clone();
+
+    let both_axes_is_increasing = (vent_line.first.0 == vent_line.first.1
+        && vent_line.second.0 == vent_line.second.1)
+        || (vent_line.first.0 > vent_line.second.0 && vent_line.first.1 > vent_line.second.1)
+        || (vent_line.first.0 < vent_line.second.0 && vent_line.first.1 < vent_line.second.1);
+
+    if both_axes_is_increasing {
+        let (start, end) = {
+            if vent_line.first.0 > vent_line.second.0 {
+                (vent_line.second, vent_line.first)
+            } else {
+                (vent_line.first, vent_line.second)
+            }
+        };
+
+        for index in (start.0..=end.0).zip(start.1..=end.1) {
+            let (x_index, y_index) = index;
+            travelling[x_index as usize][y_index as usize] += 1
+        }
+    } else {
+        let (increasing, reducing) = {
+            if vent_line.first.0 > vent_line.second.0 {
+                (
+                    (vent_line.first.1, vent_line.second.1, "y"),
+                    (vent_line.second.0, vent_line.first.0, "x"),
+                )
+            } else {
+                (
+                    (vent_line.first.0, vent_line.second.0, "x"),
+                    (vent_line.second.1, vent_line.first.1, "y"),
+                )
+            }
+        };
+
+        for index in (increasing.0..=increasing.1).zip((reducing.0..=reducing.1).rev()) {
+            let (x_index, y_index) = {
+                if increasing.2 == "x" {
+                    (index.0, index.1)
+                } else {
+                    (index.1, index.0)
+                }
+            };
+            travelling[x_index as usize][y_index as usize] += 1
+        }
+    }
+
+    travelling
 }
 
 fn is_travelling_horizontal(vent_line: &VentLine) -> bool {
