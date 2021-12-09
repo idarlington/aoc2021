@@ -60,27 +60,20 @@ fn day_4_part_1(converted_boards: Vec<Board>, marked_numbers: Vec<i32>) {
 
     let winning_board: Option<Board> = marked_numbers
         .iter()
-        .fold_while(None, |_, marked_number| {
+        .fold_while(None, |winning_board, marked_number| {
             selected_marked_numbers.push(marked_number.clone());
 
-            let winning_board: Option<Board> = converted_boards
-                .clone()
-                .iter()
-                .fold_while(None, |optional_winning_board, board| {
+            converted_boards.clone().iter().fold_while(
+                winning_board,
+                |optional_winning_board, board| {
                     let win = calculate_win(board.clone(), selected_marked_numbers.clone());
                     if win {
                         Done(Some(board.clone()))
                     } else {
                         Continue(optional_winning_board)
                     }
-                })
-                .into_inner();
-
-            if winning_board.is_some() {
-                Done(winning_board.clone())
-            } else {
-                Continue(winning_board.clone())
-            }
+                },
+            )
         })
         .into_inner();
 
@@ -119,10 +112,9 @@ fn day_4_part_2(converted_boards: Vec<Board>, marked_numbers: Vec<i32>) {
 
                 boards_to_check.retain(|board| !current_winning_boards.contains(board));
 
-                let mark_winning_boards = boards_to_check
-                    .clone()
-                    .iter()
-                    .fold_while(winning_boards.clone(), |mut mark_winning_boards, board| {
+                boards_to_check.clone().iter().fold_while(
+                    winning_boards.clone(),
+                    |mut mark_winning_boards, board| {
                         let win = calculate_win(board.clone(), selected_marked_numbers.clone());
 
                         if win {
@@ -135,14 +127,8 @@ fn day_4_part_2(converted_boards: Vec<Board>, marked_numbers: Vec<i32>) {
                         } else {
                             Continue(mark_winning_boards)
                         }
-                    })
-                    .into_inner();
-
-                if mark_winning_boards.len() == converted_boards.len() {
-                    Done(mark_winning_boards.clone())
-                } else {
-                    Continue(mark_winning_boards.clone())
-                }
+                    },
+                )
             },
         )
         .into_inner();
