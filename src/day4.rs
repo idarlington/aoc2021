@@ -63,7 +63,7 @@ fn day_4_part_1(converted_boards: Vec<Board>, marked_numbers: Vec<i32>) {
         .fold_while(None, |winning_board, marked_number| {
             selected_marked_numbers.push(marked_number.clone());
 
-            converted_boards.clone().iter().fold_while(
+            converted_boards.iter().fold_while(
                 winning_board,
                 |optional_winning_board, board| {
                     let win = calculate_win(board.clone(), selected_marked_numbers.clone());
@@ -78,7 +78,6 @@ fn day_4_part_1(converted_boards: Vec<Board>, marked_numbers: Vec<i32>) {
         .into_inner();
 
     let flattened_board = winning_board
-        .clone()
         .unwrap()
         .rows
         .into_iter()
