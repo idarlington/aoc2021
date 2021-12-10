@@ -11,34 +11,34 @@ pub fn main() {
         .collect();
 
     let init_growth_timers: Vec<i64> =
-        content_value.iter().fold(vec![0; 9], |mut timers, timer| {
-            timers[timer.clone()] += 1;
+        content_value.iter().fold(vec![0; 9], |mut timers, &timer| {
+            timers[timer] += 1;
             timers
         });
 
-    day_6_part_1(init_growth_timers.clone(), 80);
-    day_6_part_2(init_growth_timers.clone(), 256);
+    day_6_part_1(&init_growth_timers, 80);
+    day_6_part_2(&init_growth_timers, 256);
 }
 
-fn day_6_part_1(init_growth_timers: Vec<i64>, days_after: i32) {
-    let growth_timers = calculate_growth_timers(init_growth_timers, days_after);
+fn day_6_part_1(init_growth_timers: &Vec<i64>, days_after: i32) {
+    let growth_timers = calculate_growth_timers(&init_growth_timers, days_after);
 
     println!(
         "Day 6, part 1: {}",
-        growth_timers.clone().iter().sum::<i64>()
+        growth_timers.iter().sum::<i64>()
     );
 }
 
-fn day_6_part_2(init_growth_timers: Vec<i64>, days_after: i32) {
-    let growth_timers = calculate_growth_timers(init_growth_timers, days_after);
+fn day_6_part_2(init_growth_timers: &Vec<i64>, days_after: i32) {
+    let growth_timers = calculate_growth_timers(&init_growth_timers, days_after);
 
     println!(
         "Day 6, part 2: {}",
-        growth_timers.clone().iter().sum::<i64>()
+        growth_timers.iter().sum::<i64>()
     );
 }
 
-fn calculate_growth_timers(init_growth_timers: Vec<i64>, days_after: i32) -> Vec<i64> {
+fn calculate_growth_timers(init_growth_timers: &Vec<i64>, days_after: i32) -> Vec<i64> {
     (0..days_after).fold(init_growth_timers.clone(), |growth_timers, _| {
         let mut updated_growth_timers = growth_timers.clone();
 
