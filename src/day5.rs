@@ -64,6 +64,7 @@ fn day_5_part_1(vent_lines: &Vec<VentLine>) {
 fn day_5_part_2(vent_lines: &Vec<VentLine>) {
     let travelling = calculate_travelling(&vent_lines, true);
     let overlap_count = calculate_overlap_count(&travelling);
+
     println!("Day 5, part 2: {}", overlap_count);
 }
 
