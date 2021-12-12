@@ -16,3 +16,10 @@ cargo build
 cargo run
 ```
 
+You can also run single scripts after installing the dependencies with `cargo build`; for e.g. to run `day5.rs`
+
+```shell
+rustc -L target/debug/deps src/day5.rs && ./day5
+```
+
+from the main directory.
