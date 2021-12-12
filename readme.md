@@ -21,5 +21,3 @@ You can also run single scripts after installing the dependencies with `cargo bu
 ```shell
 rustc -L target/debug/deps src/day5.rs && ./day5
 ```
-
-from the main directory.
