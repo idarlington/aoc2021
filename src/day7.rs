@@ -94,12 +94,11 @@ fn populate_positions_fuel(all_positions: HashMap<i32, Position>, crab_positions
                     }
                 };
 
-                let updated_position: &Position = positions.get(&current_key).unwrap();
-                let updated_position = Position {
+                let updated_position: Position = positions.get(&current_key).unwrap().clone();
+                positions.insert(current_key, Position {
                     fuel: updated_position.fuel + fuel,
-                    ..*updated_position
-                };
-                positions.insert(current_key, updated_position);
+                    ..updated_position
+                });
             }
 
             positions.clone()
