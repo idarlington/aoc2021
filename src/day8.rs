@@ -18,20 +18,15 @@ pub(crate) fn main() {
     let lines = contents
         .split("\n")
         .collect::<Vec<&str>>()
-        .clone()
         .iter()
         .map(|line| {
             let line_contents = line.clone().split("|").collect::<Vec<&str>>();
 
             let output = line_contents[1]
-                .clone()
                 .split_whitespace()
-                .clone()
                 .collect::<Vec<&str>>();
             let patterns = line_contents[0]
-                .clone()
                 .split_whitespace()
-                .clone()
                 .collect::<Vec<&str>>();
 
             Line { patterns, output }
@@ -88,7 +83,7 @@ fn day_8_part_2(lines: &Vec<Line>) {
         sum
     });
 
-    println!("Day 8, part 1: {}", sum);
+    println!("Day 8, part 2: {}", sum);
 }
 
 fn deduct_digit_patterns(
